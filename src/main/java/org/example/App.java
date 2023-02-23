@@ -4,7 +4,9 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import org.example.entity.*;
+import org.h2.tools.Server;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -48,7 +50,7 @@ public class App {
         client2.setPrenom("prénom du client2");
         client2.setNom("nom du client2");
         client2.setDateNaissance(LocalDate.now());
-        client1.setAdresse(adresse2);
+        client2.setAdresse(adresse2);
         client3.setPrenom("prénom du client3");
         client3.setNom("nom du client3");
         client3.setDateNaissance(LocalDate.now());
@@ -102,5 +104,13 @@ public class App {
         em.persist(operation1);
         em.persist(operation2);
         em.getTransaction().commit();
+        //connection à la base de données
+        try {
+            Server.createWebServer("-web", "-webAllowOthers", "-webPort", "9090")
+                    .start();
+        } catch (
+                SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
